@@ -1,7 +1,7 @@
 Opis Storages
 =============
 
-This package provides some storage implemenatations for [Opis Cache](https://github.com/opis/cache),
+This package provides storage implementations for [Opis Cache](https://github.com/opis/cache),
 [Opis Session](https://github.com/opis/session) and [Opis Config](https://github.com/opis/config) libraries.
 
 ### License
