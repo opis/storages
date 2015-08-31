@@ -1,5 +1,5 @@
 {
-    "name": "opis/session",
+    "name": "opis/storages",
     "description": "This package provides storage implemenatations for Opis Cache, Opis Session and Opis Config",
     "keywords": ["opis", "storage", "session", "cache", "config", "redis", "database"],
     "homepage": "http://www.opis.io/session",
