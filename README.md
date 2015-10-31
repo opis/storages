@@ -16,7 +16,7 @@ This package provides storage implementations for [Opis Cache](https://github.co
 ### Requirements
 
 * PHP 5.3.* or higher
-* [Opis Database](http://www.opis.io/database) ^2.1.1
+* [Opis Database](http://www.opis.io/database) ^3.0.0
 * [Predis](https://github.com/nrk/predis) 1.0.*
 
 ### Installation
@@ -26,7 +26,7 @@ This library is available on [Packagist](https://packagist.org/packages/opis/sto
 ```json
 {
     "require": {
-        "opis/storages": "^1.0.0"
+        "opis/storages": "^1.1.0"
     }
 }
 ```
