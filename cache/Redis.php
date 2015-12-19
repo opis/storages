@@ -26,9 +26,8 @@ use Opis\Cache\StorageInterface;
 class Redis implements StorageInterface
 {
     protected $redis;
-    
     protected $prefix;
-    
+
     /**
      * Constructor
      */
@@ -37,16 +36,15 @@ class Redis implements StorageInterface
         $this->redis = $redis;
         $this->prefix = $prefix;
     }
-    
+
     /**
      * Destructor
      */
-    
     public function __destruct()
     {
         $this->redis = null;
     }
-    
+
     /**
      * Store variable in the cache.
      *
@@ -56,17 +54,15 @@ class Redis implements StorageInterface
      * @param   int      $ttl    (optional) Time to live
      * @return  boolean
      */
-    
     public function write($key, $value, $ttl = 0)
     {
         $this->redis->set($this->prefix . $key, is_numeric($value) ? $value : serialize($value));
-        if($ttl != 0)
-        {
+        if ($ttl != 0) {
             $this->redis->expire($this->prefix . $key, $ttl);
         }
         return true;
     }
-    
+
     /**
      * Fetch variable from the cache.
      *
@@ -74,13 +70,12 @@ class Redis implements StorageInterface
      * @param   string  $key  Cache key
      * @return  mixed
      */
-    
     public function read($key)
     {
         $data = $this->redis->get($this->prefix . $key);
         return $data === null ? false : (is_numeric($data) ? $data : unserialize($data));
     }
-    
+
     /**
      * Returns TRUE if the cache key exists and FALSE if not.
      * 
@@ -88,12 +83,11 @@ class Redis implements StorageInterface
      * @param   string   $key  Cache key
      * @return  boolean
      */
-    
     public function has($key)
     {
         return (bool) $this->redis->exists($this->prefix . $key);
     }
-    
+
     /**
      * Delete a variable from the cache.
      *
@@ -101,22 +95,19 @@ class Redis implements StorageInterface
      * @param   string   $key  Cache key
      * @return  boolean
      */
-    
     public function delete($key)
     {
         return (bool) $this->redis->del($this->prefix . $key);
     }
-    
+
     /**
      * Clears the user cache.
      *
      * @access  public
      * @return  boolean
      */
-    
     public function clear()
     {
         return (bool) $this->redis->flushdb();
     }
-
 }

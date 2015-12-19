@@ -28,51 +28,43 @@ use Opis\Database\Database as OpisDatabase;
 class Database implements SessionHandlerInterface
 {
     protected $maxLifetime;
-    
     protected $db;
-    
     protected $table;
-    
     protected $columns;
-    
+
     /**
      * Constructor
      *
      * @access  public
      */
-    
     public function __construct(Connection $connection, $table, $maxLifetime = 0, array $columns = array())
     {
         $this->db = new OpisDatabase($connection);
         $this->table = $table;
         $this->maxLifetime = $maxLifetime > 0 ? $maxLifetime : ini_get('session.gc_maxlifetime');
-        
+
         $columns += array(
             'id' => 'id',
             'data' => 'data',
             'expires' => 'expires',
         );
-        
+
         $this->columns = $columns;
-        
     }
-    
+
     /**
      * Destructor.
      *
      * @access public
      */
-
     public function __destruct()
-    {   
+    {
         // Fixes issue with Debian and Ubuntu session garbage collection
-        
-        if(mt_rand(1, 100) === 100)
-        {
+
+        if (mt_rand(1, 100) === 100) {
             $this->gc(0);
         }
     }
-
 
     /**
      * Open session.
@@ -82,7 +74,6 @@ class Database implements SessionHandlerInterface
      * @param   string   $sessionName  Session name
      * @return  boolean
      */
-
     public function open($savePath, $sessionName)
     {
         return true;
@@ -94,7 +85,6 @@ class Database implements SessionHandlerInterface
      * @access  public
      * @return  boolean
      */
-
     public function close()
     {
         return true;
@@ -107,19 +97,15 @@ class Database implements SessionHandlerInterface
      * @param   string  $id  Session id
      * @return  string
      */
-
     public function read($id)
     {
-        try
-        {
+        try {
             $result = $this->db->from($this->table)
-                               ->where($this->columns['id'])->eq($id)
-                               ->column($this->columns['data']);
-            
+                ->where($this->columns['id'])->eq($id)
+                ->column($this->columns['data']);
+
             return $result === false ? '' : $result;
-        }
-        catch(PDOException $e)
-        {
+        } catch (PDOException $e) {
             return '';
         }
     }
@@ -131,36 +117,29 @@ class Database implements SessionHandlerInterface
      * @param   string  $id    Session id
      * @param   string  $data  Session data
      */
-
     public function write($id, $data)
     {
-        try
-        {
+        try {
             $result = $this->db->from($this->table)
-                               ->where($this->columns['id'])->eq($id)
-                               ->count();
-            
-            if($result != 0)
-            {
+                ->where($this->columns['id'])->eq($id)
+                ->count();
+
+            if ($result != 0) {
                 return (bool) $this->db->update($this->table)
-                                        ->where($this->columns['id'])->eq($id)
-                                        ->set(array(
-                                            $this->columns['data'] => $data,
-                                            $this->columns['expires'] => time() + $this->maxLifetime,
-                                        ));
-            }
-            else
-            {
+                        ->where($this->columns['id'])->eq($id)
+                        ->set(array(
+                            $this->columns['data'] => $data,
+                            $this->columns['expires'] => time() + $this->maxLifetime,
+                ));
+            } else {
                 return $this->db->insert(array(
-                                    $this->columns['id'] => $id,
-                                    $this->columns['data'] => $data,
-                                    $this->columns['expires'] => time() + $this->maxLifetime
-                                ))
-                                ->into($this->table);
+                            $this->columns['id'] => $id,
+                            $this->columns['data'] => $data,
+                            $this->columns['expires'] => time() + $this->maxLifetime
+                        ))
+                        ->into($this->table);
             }
-        }
-        catch(PDOException $e)
-        {
+        } catch (PDOException $e) {
             return false;
         }
     }
@@ -172,17 +151,13 @@ class Database implements SessionHandlerInterface
      * @param   string   $id  Session id
      * @return  boolean
      */
-
     public function destroy($id)
     {
-        try
-        {
+        try {
             return (bool) $this->db->from($this->table)
-                                   ->where($this->columns['id'])->eq($id)
-                                   ->delete();
-        }
-        catch(PDOException $e)
-        {
+                    ->where($this->columns['id'])->eq($id)
+                    ->delete();
+        } catch (PDOException $e) {
             return false;
         }
     }
@@ -194,17 +169,13 @@ class Database implements SessionHandlerInterface
      * @param   int      $maxLifetime  Lifetime in secods
      * @return  boolean
      */
-
     public function gc($maxLifetime)
     {
-        try
-        {
+        try {
             return (bool) $this->db->from($this->table)
-                                   ->where($this->columns['expires'])->lt(time())
-                                   ->delete();
-        }
-        catch(PDOException $e)
-        {
+                    ->where($this->columns['expires'])->lt(time())
+                    ->delete();
+        } catch (PDOException $e) {
             return false;
         }
     }

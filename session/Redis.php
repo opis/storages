@@ -25,27 +25,22 @@ use SessionHandlerInterface;
 
 class Redis implements SessionHandlerInterface
 {
- 
     protected $prefix;
-    
     protected $maxLifetime;
-    
     protected $redis;
-    
+
     /**
      * Constructor
      *
      * @access  public
      * 
      */
-    
     public function __construct(Client $redis, $prefix = 'session_', $maxLifetime = 0)
     {
         $this->redis = $redis;
         $this->prefix = $prefix;
         $this->maxLifetime = $maxLifetime > 0 ? $maxLifetime : ini_get('session.gc_maxlifetime');
     }
-
 
     /**
      * Open session.
@@ -57,7 +52,6 @@ class Redis implements SessionHandlerInterface
      * 
      * @return  boolean
      */
-
     public function open($savePath, $sessionName)
     {
         return true;
@@ -70,7 +64,6 @@ class Redis implements SessionHandlerInterface
      * 
      * @return  boolean
      */
-
     public function close()
     {
         return true;
@@ -85,7 +78,6 @@ class Redis implements SessionHandlerInterface
      * 
      * @return  string
      */
-
     public function read($id)
     {
         return (string) $this->redis->get($this->prefix . $id);
@@ -101,13 +93,12 @@ class Redis implements SessionHandlerInterface
      *
      * @return   boolean
      */
-
     public function write($id, $data)
     {
         $this->redis->set($this->prefix . $id, $data);
-        
+
         $this->redis->expire($this->prefix . $id, $this->maxLifetime);
-        
+
         return true;
     }
 
@@ -118,7 +109,6 @@ class Redis implements SessionHandlerInterface
      * @param   string   $id  Session id
      * @return  boolean
      */
-
     public function destroy($id)
     {
         return (bool) $this->redis->del($this->prefix . $id);
@@ -133,7 +123,6 @@ class Redis implements SessionHandlerInterface
      * 
      * @return  boolean
      */
-
     public function gc($maxLifetime)
     {
         return true;
