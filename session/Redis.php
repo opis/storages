@@ -25,15 +25,21 @@ use SessionHandlerInterface;
 
 class Redis implements SessionHandlerInterface
 {
+    /** @var    string */
     protected $prefix;
+
+    /** @var    int */
     protected $maxLifetime;
+
+    /** @var    \Predis\Client */
     protected $redis;
 
     /**
      * Constructor
      *
-     * @access  public
-     * 
+     * @param   \Predis\Client  $redis          Redis client
+     * @param   string          $prefix         (optional) Prefix
+     * @param   int             $maxLifetime    (optional) Session's max lifetime
      */
     public function __construct(Client $redis, $prefix = 'session_', $maxLifetime = 0)
     {
@@ -45,8 +51,6 @@ class Redis implements SessionHandlerInterface
     /**
      * Open session.
      *
-     * @access  public
-     * 
      * @param   string  $savePath       Save path
      * @param   string  $sessionName    Session name
      * 
@@ -60,8 +64,6 @@ class Redis implements SessionHandlerInterface
     /**
      * Close session.
      *
-     * @access  public
-     * 
      * @return  boolean
      */
     public function close()
@@ -72,8 +74,6 @@ class Redis implements SessionHandlerInterface
     /**
      * Returns session data.
      *
-     * @access  public
-     * 
      * @param   string  $id Session id
      * 
      * @return  string
@@ -86,8 +86,6 @@ class Redis implements SessionHandlerInterface
     /**
      * Writes data to the session.
      *
-     * @access  public
-     * 
      * @param   string  $id     Session id
      * @param   string  $data   Session data
      *
@@ -105,8 +103,8 @@ class Redis implements SessionHandlerInterface
     /**
      * Destroys the session.
      *
-     * @access  public
      * @param   string   $id  Session id
+     * 
      * @return  boolean
      */
     public function destroy($id)
@@ -117,8 +115,6 @@ class Redis implements SessionHandlerInterface
     /**
      * Garbage collector.
      *
-     * @access  public
-     * 
      * @param   int      $maxLifetime  Lifetime in secods
      * 
      * @return  boolean

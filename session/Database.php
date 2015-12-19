@@ -27,15 +27,29 @@ use Opis\Database\Database as OpisDatabase;
 
 class Database implements SessionHandlerInterface
 {
+    /** @var    int */
     protected $maxLifetime;
+
+    /** @var    \Opis\Database\Database */
     protected $db;
+
+    /** @var    string */
     protected $table;
+
+    /** @var    array */
     protected $columns;
 
     /**
      * Constructor
-     *
-     * @access  public
+     * 
+     * Database storage requires a table with three columns: id, data and expires.
+     * It is recommended that `id` column to be unique and `data` column blob.
+     * You can change columns name by passing the fourth parrameter.
+     * 
+     * @param   \Opis\Database\Connection   $connection     Database connection
+     * @param   string                      $table          Table's name
+     * @param   int                         $maxLifetime    (optional) Session's max lifetime
+     * @param   array                       $columns        (optional) Table's columns
      */
     public function __construct(Connection $connection, $table, $maxLifetime = 0, array $columns = array())
     {
@@ -54,8 +68,6 @@ class Database implements SessionHandlerInterface
 
     /**
      * Destructor.
-     *
-     * @access public
      */
     public function __destruct()
     {
@@ -69,9 +81,9 @@ class Database implements SessionHandlerInterface
     /**
      * Open session.
      *
-     * @access  public
      * @param   string   $savePath     Save path
      * @param   string   $sessionName  Session name
+     * 
      * @return  boolean
      */
     public function open($savePath, $sessionName)
@@ -82,7 +94,6 @@ class Database implements SessionHandlerInterface
     /**
      * Close session.
      *
-     * @access  public
      * @return  boolean
      */
     public function close()
@@ -93,8 +104,8 @@ class Database implements SessionHandlerInterface
     /**
      * Returns session data.
      *
-     * @access  public
      * @param   string  $id  Session id
+     * 
      * @return  string
      */
     public function read($id)
@@ -113,9 +124,10 @@ class Database implements SessionHandlerInterface
     /**
      * Writes data to the session.
      *
-     * @access  public
      * @param   string  $id    Session id
      * @param   string  $data  Session data
+     * 
+     * @return  boolean
      */
     public function write($id, $data)
     {
@@ -147,7 +159,6 @@ class Database implements SessionHandlerInterface
     /**
      * Destroys the session.
      *
-     * @access  public
      * @param   string   $id  Session id
      * @return  boolean
      */
@@ -165,8 +176,8 @@ class Database implements SessionHandlerInterface
     /**
      * Garbage collector.
      *
-     * @access  public
      * @param   int      $maxLifetime  Lifetime in secods
+     * 
      * @return  boolean
      */
     public function gc($maxLifetime)

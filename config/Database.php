@@ -47,12 +47,9 @@ class Database implements StorageInterface
      * It is recommended that name column to be unique and data column blob.
      * You can change columns name by passing the third parrameter.
      *
-     * @param \Opis\Database\Connection $connection Database connection
-     *
-     * @param string $table Table name
-     *
-     * @param array $columns    Columns mapping
-     * 
+     * @param   \Opis\Database\Connection   $connection Database connection
+     * @param   string                      $table      Table's name
+     * @param   array                       $columns    Columns mapping
      */
     public function __construct(Connection $connection, $table, array $columns = array())
     {
@@ -64,6 +61,13 @@ class Database implements StorageInterface
         );
     }
 
+    /**
+     * Check if an item was cached
+     * 
+     * @param   string  $name
+     * 
+     * @return  boolean
+     */
     protected function checkCache($name)
     {
         if (!isset($this->cache[$name])) {
@@ -87,6 +91,13 @@ class Database implements StorageInterface
         return true;
     }
 
+    /**
+     * Update a record
+     * 
+     * @param   string  $name
+     * 
+     * @return  boolean
+     */
     protected function updateRecord($name)
     {
         try {
@@ -101,6 +112,13 @@ class Database implements StorageInterface
         }
     }
 
+    /**
+     * Insert a new record
+     * 
+     * @param   string  $name
+     * 
+     * @return  boolean
+     */
     protected function insertRecord($name)
     {
         try {
@@ -115,6 +133,13 @@ class Database implements StorageInterface
         }
     }
 
+    /**
+     * Delete a record
+     * 
+     * @param   string  $name
+     * 
+     * @return  boolean
+     */
     protected function deleteRecord($name)
     {
         try {
@@ -127,6 +152,14 @@ class Database implements StorageInterface
         }
     }
 
+    /**
+     * Write config data
+     * 
+     * @param   string  $name
+     * @param   mixed   $value
+     * 
+     * @return  boolean
+     */
     public function write($name, $value)
     {
         $path = explode('.', $name);
@@ -146,6 +179,14 @@ class Database implements StorageInterface
         return $exists ? $this->updateRecord($key) : $this->insertRecord($key);
     }
 
+    /**
+     * Read config data
+     * 
+     * @param   string      $name
+     * @param   mixed|null  $default    (optional)
+     * 
+     * @return  mixed
+     */
     public function read($name, $default = null)
     {
         $path = explode('.', $name);
@@ -158,6 +199,13 @@ class Database implements StorageInterface
         return $default;
     }
 
+    /**
+     * Check if the config exists
+     * 
+     * @param   string  $name
+     * 
+     * @return  boolean
+     */
     public function has($name)
     {
         $path = explode('.', $name);
@@ -170,6 +218,13 @@ class Database implements StorageInterface
         return false;
     }
 
+    /**
+     * Delete a config
+     * 
+     * @param   string  $name
+     * 
+     * @return  boolean
+     */
     public function delete($name)
     {
         $path = explode('.', $name);

@@ -25,11 +25,17 @@ use Opis\Cache\StorageInterface;
 
 class Redis implements StorageInterface
 {
+    /** @var    \Predis\Clinet */
     protected $redis;
+
+    /** @var    string */
     protected $prefix;
 
     /**
      * Constructor
+     * 
+     * @param   \Predis\Client  $redis  Redis client
+     * @param   string          $prefix Cache key prefix
      */
     public function __construct(Client $redis, $prefix = '')
     {
@@ -48,10 +54,10 @@ class Redis implements StorageInterface
     /**
      * Store variable in the cache.
      *
-     * @access  public
      * @param   string   $key    Cache key
      * @param   mixed    $value  The variable to store
      * @param   int      $ttl    (optional) Time to live
+     * 
      * @return  boolean
      */
     public function write($key, $value, $ttl = 0)
@@ -66,8 +72,8 @@ class Redis implements StorageInterface
     /**
      * Fetch variable from the cache.
      *
-     * @access  public
      * @param   string  $key  Cache key
+     * 
      * @return  mixed
      */
     public function read($key)
@@ -79,8 +85,8 @@ class Redis implements StorageInterface
     /**
      * Returns TRUE if the cache key exists and FALSE if not.
      * 
-     * @access  public
      * @param   string   $key  Cache key
+     * 
      * @return  boolean
      */
     public function has($key)
@@ -91,8 +97,8 @@ class Redis implements StorageInterface
     /**
      * Delete a variable from the cache.
      *
-     * @access  public
      * @param   string   $key  Cache key
+     * 
      * @return  boolean
      */
     public function delete($key)
@@ -103,7 +109,6 @@ class Redis implements StorageInterface
     /**
      * Clears the user cache.
      *
-     * @access  public
      * @return  boolean
      */
     public function clear()
